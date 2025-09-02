@@ -313,6 +313,36 @@
     const updateInterval = 60; // seconds
 
     /**
+     * 讀取 localStorage 中的設定
+     */
+    function loadSettings() {
+        const twdAmount = localStorage.getItem('twdAmount');
+        if (twdAmount !== null) {
+            document.getElementById('twdAmount').value = twdAmount;
+        }
+
+        const profitPercentage = localStorage.getItem('profitPercentage');
+        if (profitPercentage !== null) {
+            document.getElementById('profitPercentage').value = profitPercentage;
+        }
+
+        const twdToRmbProfitShare = localStorage.getItem('twdToRmbProfitShare');
+        if (twdToRmbProfitShare !== null) {
+            document.getElementById('twdToRmbProfitShare').value = twdToRmbProfitShare;
+        }
+    }
+
+    /**
+     * 儲存設定到 localStorage
+     */
+    function saveSettings() {
+        localStorage.setItem('twdAmount', document.getElementById('twdAmount').value);
+        localStorage.setItem('profitPercentage', document.getElementById('profitPercentage').value);
+        localStorage.setItem('twdToRmbProfitShare', document.getElementById('twdToRmbProfitShare').value);
+    }
+
+
+    /**
      * 根據輸入的數值計算中介商的利潤。
      */
     function calculateResults() {
@@ -363,6 +393,9 @@
         document.getElementById('twdToRmbRate').textContent = newTwdToRmbRate.toFixed(4);
         document.getElementById('usdToRmbRate').textContent = newUsdToRmbRate.toFixed(4);
         document.getElementById('totalProfitTWD').textContent = `${totalProfitTWD.toFixed(2)} TWD`;
+
+        // 儲存設定
+        saveSettings();
     }
     
     /**
@@ -491,7 +524,10 @@
     document.getElementById('twdToRmbProfitShare').addEventListener('input', calculateResults);
 
     // 頁面加載完成時，首先獲取匯率
-    window.onload = fetchRates;
+    window.onload = function() {
+        loadSettings();
+        fetchRates();
+    };
 </script>
 
 </body>
